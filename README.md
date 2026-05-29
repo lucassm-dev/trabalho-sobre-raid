@@ -76,14 +76,41 @@ Trabalho de RAID - 02/
 
 ## Como executar
 
-### Opção 1 — Terminal (sem extensão)
+### Você já tem os arquivos do projeto?
 
-Abra o terminal na pasta do projeto e rode:
+**Sim** — já baixou ou recebeu a pasta do projeto → pule direto para uma das opções abaixo.
+
+**Não** — precisa obter os arquivos primeiro → clone o repositório:
 
 ```bash
-# Python 3 (já vem instalado no macOS)
+git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+cd SEU_REPOSITORIO
+```
+
+> Substitua `SEU_USUARIO/SEU_REPOSITORIO` pelo caminho real do repositório no GitHub.  
+> Após clonar, entre na pasta criada e siga uma das opções abaixo.
+
+---
+
+### Opção 1 — Terminal (sem extensão)
+
+**macOS**
+
+O Python 3 já vem instalado. Abra o Terminal na pasta do projeto e rode:
+
+```bash
 python3 -m http.server 8000
 ```
+
+**Windows**
+
+Abra o Prompt de Comando ou PowerShell na pasta do projeto e rode:
+
+```bash
+python -m http.server 8000
+```
+
+> Caso o Python não esteja instalado no Windows, baixe em [python.org/downloads](https://www.python.org/downloads/) e marque a opção **"Add Python to PATH"** durante a instalação.
 
 Acesse no navegador: [http://localhost:8000/apresentacao-raid.html](http://localhost:8000/apresentacao-raid.html)
 
@@ -92,6 +119,8 @@ Para encerrar o servidor: `Ctrl + C`
 ---
 
 ### Opção 2 — Live Server (VS Code)
+
+Funciona igual em macOS e Windows.
 
 1. Instale a extensão **Live Server** de Ritwick Dey no VS Code
 2. Abra a pasta do projeto no VS Code
@@ -105,12 +134,16 @@ Para encerrar o servidor: `Ctrl + C`
 
 ### Opção 3 — Abrir direto no navegador
 
+Essa opção **não requer git clone nem terminal** — funciona se você já tiver a pasta do projeto localmente.
+
+**macOS**
 ```bash
-# macOS
 open apresentacao-raid.html
 ```
 
-Ou arraste o arquivo `apresentacao-raid.html` para o navegador.
+**Windows**
+
+Clique duas vezes no arquivo `apresentacao-raid.html` ou arraste-o para o navegador.
 
 > ⚠️ As fontes do Google Fonts exigem conexão com a internet. Sem conexão, o navegador usa as fontes de fallback do sistema.
 
