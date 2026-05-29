@@ -1,0 +1,204 @@
+<style>
+  /* Disk styles matching presentation */
+  .demo-slide {
+    background: #f7f6f2;
+    border: 1.5px solid #e8e6e0;
+    border-radius: 12px;
+    padding: 24px 28px;
+    min-height: 220px;
+    position: relative;
+  }
+  .demo-eyebrow { font-size: 10px; text-transform: uppercase; letter-spacing: .18em; color: #9a988f; margin-bottom: 6px; font-family: "Outfit", sans-serif; }
+  .demo-title { font-size: 18px; font-weight: 400; color: #0a0a0a; margin-bottom: 20px; font-family: "Outfit", sans-serif; }
+
+  .disk-svg-group { display: flex; gap: 20px; align-items: flex-end; }
+  .disk-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .disk-label-bottom { font-size: 11px; font-weight: 700; color: #6d28d9; font-family: sans-serif; }
+
+  .disk-body {
+    width: 72px; height: 110px;
+    border-radius: 6px 6px 0 0;
+    background: #bed8f0; border: 1.5px solid #6ea8d8;
+    position: relative; display: flex; flex-direction: column;
+    padding: 6px; gap: 4px;
+    transition: background 0.4s ease, border-color 0.4s ease;
+  }
+  .disk-body.failed {
+    background: #fee2e2; border-color: #ef4444;
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-6px)}
+    40%{transform:translateX(6px)}
+    60%{transform:translateX(-4px)}
+    80%{transform:translateX(4px)}
+  }
+  .disk-cap {
+    width: 72px; height: 16px; border-radius: 50%;
+    background: #d8eeff; border: 1.5px solid #6ea8d8;
+    transition: background 0.4s ease, border-color 0.4s ease;
+  }
+  .disk-cap.failed { background: #fecaca; border-color: #ef4444; }
+
+  .disk-block {
+    background: #a0c8e4; border-radius: 3px;
+    font-size: 10px; font-weight: 700; color: #1a3a5c;
+    text-align: center; padding: 3px 0; flex: 1;
+    border: 1px solid #5090ba;
+  }
+  .disk-block.parity { background: #fcd34d; border-color: #d97706; color: #78350f; }
+
+  .fail-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 900; color: #ef4444;
+    opacity: 0; transition: opacity 0.3s ease 0.3s;
+    background: rgba(254,226,226,0.5);
+    border-radius: 6px 6px 0 0;
+  }
+  .fail-overlay.show { opacity: 1; }
+
+  .result-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 24px;
+    font-size: 14px; font-weight: 700;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.4s ease 0.7s, transform 0.4s ease 0.7s;
+  }
+  .result-badge.show { opacity: 1; transform: translateY(0); }
+  .result-ok { background: #dcfce7; color: #15803d; border: 1.5px solid #86efac; }
+  .result-fail { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+
+  .arrow-sep { font-size: 28px; color: #d4d2c9; align-self: center; margin: 0 8px; }
+
+  .controls { display: flex; gap: 10px; margin-top: 16px; }
+  .ctrl-btn {
+    padding: 7px 16px; border-radius: 8px; border: 1.5px solid #e8e6e0;
+    background: white; font-size: 12px; font-weight: 500;
+    cursor: pointer; color: #0a0a0a;
+    transition: background .2s, border-color .2s;
+  }
+  .ctrl-btn:hover { background: #0a0a0a; color: white; border-color: #0a0a0a; }
+  .ctrl-note { font-size: 11px; color: #9a988f; align-self: center; }
+
+  .label-note { font-size: 11px; color: #6b6b66; font-style: italic; margin-top: 4px; }
+</style>
+
+<h2>Como a animação de falha vai aparecer em cada slide?</h2>
+<p class="subtitle">Teste a animação clicando em "Disparar animação". Assim ficará quando o slide entrar na apresentação.</p>
+
+<div class="section">
+  <p class="label">Preview — RAID 5 (1 disco falha → volume íntegro)</p>
+
+  <div class="demo-slide">
+    <div class="demo-eyebrow">Rhaidy Vieira · Tolerância a Falhas</div>
+    <div class="demo-title">RAID 5 — O que acontece quando 1 disco falha?</div>
+
+    <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+      <!-- Estado normal -->
+      <div>
+        <div style="font-size:10px;color:#9a988f;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Estado normal</div>
+        <div class="disk-svg-group">
+          <div class="disk-wrap">
+            <div class="disk-cap" id="cap1"></div>
+            <div class="disk-body" id="disk1">
+              <div class="disk-block">A1</div>
+              <div class="disk-block">A2</div>
+              <div class="disk-block">A3</div>
+              <div class="fail-overlay" id="fail1">✕</div>
+            </div>
+            <div class="disk-label-bottom">Disco 1</div>
+          </div>
+          <div class="disk-wrap">
+            <div class="disk-cap"></div>
+            <div class="disk-body">
+              <div class="disk-block">B1</div>
+              <div class="disk-block">B2</div>
+              <div class="disk-block parity">P</div>
+            </div>
+            <div class="disk-label-bottom">Disco 2</div>
+          </div>
+          <div class="disk-wrap">
+            <div class="disk-cap"></div>
+            <div class="disk-body">
+              <div class="disk-block parity">P</div>
+              <div class="disk-block">C2</div>
+              <div class="disk-block">C3</div>
+            </div>
+            <div class="disk-label-bottom">Disco 3</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arrow-sep">→</div>
+
+      <!-- Resultado -->
+      <div>
+        <div style="font-size:10px;color:#9a988f;margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase;">Após falha do Disco 1</div>
+        <div class="disk-svg-group">
+          <div class="disk-wrap">
+            <div class="disk-cap failed" id="cap2"></div>
+            <div class="disk-body failed" id="disk2" style="background:#fee2e2;border-color:#ef4444">
+              <div class="disk-block" style="opacity:.2">A1</div>
+              <div class="disk-block" style="opacity:.2">A2</div>
+              <div class="disk-block" style="opacity:.2">A3</div>
+              <div class="fail-overlay" id="fail2">✕</div>
+            </div>
+            <div class="disk-label-bottom" style="color:#ef4444">Disco 1</div>
+          </div>
+          <div class="disk-wrap">
+            <div class="disk-cap"></div>
+            <div class="disk-body">
+              <div class="disk-block">B1</div>
+              <div class="disk-block">B2</div>
+              <div class="disk-block parity">P</div>
+            </div>
+            <div class="disk-label-bottom">Disco 2</div>
+          </div>
+          <div class="disk-wrap">
+            <div class="disk-cap"></div>
+            <div class="disk-body">
+              <div class="disk-block parity">P</div>
+              <div class="disk-block">C2</div>
+              <div class="disk-block">C3</div>
+            </div>
+            <div class="disk-label-bottom">Disco 3</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;">
+          <span class="result-badge result-ok show">Volume Íntegro — dados recuperados pela paridade</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="label-note">Na apresentação: ao entrar no slide, o Disco 1 chacoalha e fica vermelho (0.8s), depois o badge aparece (1.2s).</p>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn" onclick="triggerAnim()">Disparar animação (simular entrada do slide)</button>
+    <button class="ctrl-btn" onclick="resetAnim()">Resetar</button>
+    <span class="ctrl-note">Na apresentação real, dispara automático ao entrar no slide</span>
+  </div>
+</div>
+
+<script>
+function triggerAnim() {
+  const d = document.getElementById('disk1');
+  const c = document.getElementById('cap1');
+  const f = document.getElementById('fail2');
+  // Simulate the "before" disk failing
+  setTimeout(() => {
+    d.classList.add('failed');
+    c.classList.add('failed');
+  }, 400);
+  setTimeout(() => {
+    document.getElementById('fail1').classList.add('show');
+  }, 700);
+}
+function resetAnim() {
+  document.getElementById('disk1').classList.remove('failed');
+  document.getElementById('cap1').classList.remove('failed');
+  document.getElementById('fail1').classList.remove('show');
+}
+</script>

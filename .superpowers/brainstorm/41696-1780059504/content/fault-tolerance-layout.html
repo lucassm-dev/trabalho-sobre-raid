@@ -1,0 +1,182 @@
+<style>
+  body { font-family: "Inter", sans-serif; }
+  .question-label { font-size: 13px; text-transform: uppercase; letter-spacing: .12em; color: #9a988f; margin-bottom: 6px; }
+  h2 { font-size: 22px; font-weight: 500; margin-bottom: 6px; color: #0a0a0a; }
+  .sub { font-size: 14px; color: #6b6b66; margin-bottom: 28px; }
+
+  /* Mini disk animation mockup */
+  .disk-row { display: flex; gap: 8px; align-items: flex-end; margin: 8px 0; }
+  .disk { width: 36px; height: 60px; border-radius: 4px; background: #bed8f0; border: 1.5px solid #6ea8d8; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: #1a3a5c; position: relative; flex-direction: column; gap: 2px; }
+  .disk.failed { background: #fee2e2; border-color: #ef4444; color: #991b1b; }
+  .disk.failed::after { content: "✕"; font-size: 14px; font-weight: 700; color: #ef4444; }
+  .disk span { font-size: 8px; }
+  .result-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+  .result-ok { background: #dcfce7; color: #15803d; }
+  .result-fail { background: #fee2e2; color: #991b1b; }
+  .raid-label { font-size: 11px; font-weight: 700; color: #6d28d9; margin-bottom: 4px; }
+  .arrow { color: #9a988f; font-size: 18px; margin: 0 6px; align-self: center; }
+
+  .mockup-box {
+    background: #f7f6f2;
+    border: 1.5px solid #e8e6e0;
+    border-radius: 10px;
+    padding: 16px 20px;
+    min-height: 200px;
+  }
+  .slide-frame {
+    background: #f7f6f2;
+    border: 1.5px solid #e8e6e0;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 12px;
+  }
+  .slide-title { font-size: 15px; font-weight: 600; color: #0a0a0a; margin-bottom: 12px; }
+  .slide-eyebrow { font-size: 9px; letter-spacing: .15em; text-transform: uppercase; color: #9a988f; margin-bottom: 4px; }
+
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .raid-cell { background: white; border-radius: 8px; padding: 10px; border: 1px solid #e8e6e0; }
+
+  .step-indicator { display: flex; gap: 4px; margin-top: 8px; }
+  .step-dot { width: 6px; height: 6px; border-radius: 50%; background: #e8e6e0; }
+  .step-dot.active { background: #0a0a0a; }
+
+  .nav-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  .nav-btn-mock { background: transparent; border: 1px solid #e8e6e0; border-radius: 6px; padding: 4px 12px; font-size: 10px; color: #0a0a0a; cursor: default; }
+  .progress-mock { flex: 1; height: 1px; background: #e8e6e0; margin: 0 10px; }
+</style>
+
+<div class="question-label">Layout do slide de Tolerância a Falhas</div>
+<h2>Como exibir a animação de falha de disco?</h2>
+<p class="sub">Cada opção afeta quantos slides serão adicionados e como o apresentador controla o ritmo.</p>
+
+<div class="options">
+
+  <!-- Option A: Grid único -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Grid em um único slide — todos animam juntos</h3>
+      <p>Um slide mostra todos os RAIDs em grade. Ao entrar no slide, as animações de falha disparam automaticamente em sequência. Apresentador narra enquanto assiste. <strong>+1 slide.</strong></p>
+
+      <div class="slide-frame" style="margin-top:12px">
+        <div class="slide-eyebrow">Tolerância a Falhas</div>
+        <div class="slide-title">O que acontece quando um disco falha?</div>
+        <div class="grid-3">
+          <div class="raid-cell">
+            <div class="raid-label">RAID 0</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>D2</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-fail">Perdido</span>
+            </div>
+          </div>
+          <div class="raid-cell">
+            <div class="raid-label">RAID 1</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>D2</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Íntegro</span>
+            </div>
+          </div>
+          <div class="raid-cell">
+            <div class="raid-label">RAID 5</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>D2</span></div>
+              <div class="disk"><span>P</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Íntegro</span>
+            </div>
+          </div>
+          <div class="raid-cell">
+            <div class="raid-label">RAID 6</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk failed"></div>
+              <div class="disk"><span>D3</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Íntegro</span>
+            </div>
+          </div>
+          <div class="raid-cell">
+            <div class="raid-label">RAID 10</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>M</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Íntegro</span>
+            </div>
+          </div>
+          <div class="raid-cell">
+            <div class="raid-label">RAID 50</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>D2</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Íntegro</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <span style="background:#dcfce7;color:#15803d;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">+1 slide</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Animação automática</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Visão comparativa</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Um RAID por vez com clique -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Um RAID por vez — avança com clique do apresentador</h3>
+      <p>Um slide por tipo de RAID, cada um com a animação de falha. O apresentador avança com o clicker e narra cada caso. Mais controle do ritmo. <strong>+6 slides.</strong></p>
+
+      <div class="slide-frame" style="margin-top:12px">
+        <div class="slide-eyebrow">Tolerância a Falhas · RAID 5</div>
+        <div class="slide-title">RAID 5 — O que acontece quando 1 disco falha?</div>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:8px;">
+          <div>
+            <div style="font-size:10px;color:#9a988f;margin-bottom:4px;">Antes da falha</div>
+            <div class="disk-row">
+              <div class="disk"><span>A1</span></div>
+              <div class="disk"><span>A2</span></div>
+              <div class="disk"><span>P</span></div>
+            </div>
+          </div>
+          <div style="font-size:20px;color:#d4d2c9;">→</div>
+          <div>
+            <div style="font-size:10px;color:#9a988f;margin-bottom:4px;">Disco 1 falhou</div>
+            <div class="disk-row">
+              <div class="disk failed"></div>
+              <div class="disk"><span>A2</span></div>
+              <div class="disk"><span>P</span></div>
+              <div class="arrow">→</div>
+              <span class="result-badge result-ok">Volume Íntegro</span>
+            </div>
+          </div>
+        </div>
+        <div class="step-indicator">
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <span style="background:#fce7f3;color:#9d174d;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">+6 slides</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Ritmo do apresentador</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;">Mais detalhe por RAID</span>
+      </div>
+    </div>
+  </div>
+
+</div>
