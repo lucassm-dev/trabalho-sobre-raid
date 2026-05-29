@@ -134,7 +134,7 @@ Funciona igual em macOS e Windows.
 
 ### Opção 3 — Abrir direto no navegador
 
-Essa opção **não requer git clone nem terminal** — funciona se você já tiver a pasta do projeto localmente.
+> ⚠️ **Não funciona pelo GitHub.** O GitHub exibe o HTML como código-fonte, não como página. É necessário ter a pasta do projeto localmente (após o `git clone`).
 
 **macOS**
 ```bash
@@ -145,7 +145,7 @@ open apresentacao-raid.html
 
 Clique duas vezes no arquivo `apresentacao-raid.html` ou arraste-o para o navegador.
 
-> ⚠️ As fontes do Google Fonts exigem conexão com a internet. Sem conexão, o navegador usa as fontes de fallback do sistema.
+> As fontes do Google Fonts exigem conexão com a internet. Sem conexão, o navegador usa as fontes de fallback do sistema.
 
 ---
 
